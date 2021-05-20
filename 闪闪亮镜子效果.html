@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    #d1{
+      width: 500px;
+      height: 400px;
+      background: red;
+    }
+    .c1{
+      width: 90vw;
+      margin: 20px auto;
+      /* outline: green solid 2px; */
+      border: 2px solid green;
+      border-radius: 100px;
+    }
+    .c2{
+      width: 600px;
+      height: 100px;
+      /* background: repeating-linear-gradient(135deg, white, blue, white); */
+      background: repeating-linear-gradient(112deg, #D9CFBB  25%, #C3B393 0, #C3B393 50%,
+                    #D9CFBB 0, #D9CFBB 75%, #C3B393 0);
+      background-size: 40px 100px;
+      animation: move 5s linear infinite;
+      border-radius: 100px;
+    }
+    @keyframes move{
+      from{
+        background-position: 0%;
+      }
+      to{
+        background-position: 200%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="http://www.baidu.com">去百度</a>
+  <div class="c1">
+    <div class="c2"></div>
+  </div>
+  <canvas id="d1" width="500" height="400"></canvas>
+  <script>
+    function fn(num) {
+
+      const dw = document.getElementById("d1");
+      const ctx = dw.getContext("2d");
+      ctx.beginPath()
+      ctx.fillStyle = 'yellow'
+      ctx.lineWidth = '1'
+      ctx.strokeStyle="black"
+      // ctx.rect(10,10,100,100)
+      // ctx.fill();
+      // ctx.fillRect(100,100,100,100)
+      let p = Math.PI
+      let d = 2 * p * num / 100 - p / 2;
+      ctx.moveTo(200,200)
+      ctx.lineTo(200,100)
+      let flag = p/-2;
+      let ss = setInterval(function () {
+        ctx.clearRect(0,0,500,400)
+        flag += p/100
+        ctx.arc(200,200,100,p/-2, flag,false)
+        ctx.lineTo(200,200)
+        ctx.fill()
+        console.log(flag, d)
+        if(flag >= d) {
+          clearInterval(ss)
+        }
+      },10)
+      
+      ctx.fill()
+    }
+    fn(20)
+  </script>
+</body>
+</html>

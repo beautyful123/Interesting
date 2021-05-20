@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>龙形拳</title>
+  <style>
+    #container{
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    .bubble{
+      animation: 1s abc infinite;
+      position: absolute;
+      transition: all .2s;
+      background:url(./2.png);
+      background-size: cover;
+    }
+    @keyframes abc{
+      0%{
+        /* transform: translateY(0px); */
+        margin-top: 0px;
+      }
+      50%{
+        /* transform: translateY(10px); */
+        margin-top: -10px;
+      }
+      100%{
+        margin-top: 0px;
+        /* transform: translateY(0px); */
+      }
+    }
+    .bubble:hover{
+      transform: scale(5);
+      z-index: 100;
+    }
+    .bubble:hover:before{
+      position: absolute;
+      top: -30;
+      left: -43.05px;
+      display: inline-block;
+      color: red;
+      width: 100px;
+      height: 12px;
+      content: "秦媛丽真漂亮";
+      font-size: 12px;
+      transform-origin: center center;
+      transform: scale(0.2);
+    }
+    #f1:active{
+      transform-origin: top left;
+      transition: transform 1s;
+      transform: scale(2);
+    }
+  </style>
+</head>
+<body>
+  <h1 id="f1">需求：</h1>
+  <h4>1. 鼠标放置放大，点击显示详情</h4>
+  <h4>2. 气泡会跳动</h4>
+  <h4>3. 气泡组成一个龙形态</h4>
+  <hr>
+  <div style="position: relative;"> 
+    <canvas id="d1"></canvas>
+    <div id="container"></div>
+  </div>
+  <script>
+    var canvas = document.getElementById("d1"); // 获取画布
+    var ctx = canvas.getContext("2d"); // 获取画笔
+
+    // 画龙
+    var image = new Image();
+    image.src = "./1.png";
+    image.onload = function(){
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image,0,0);
+   
+      // 获取并裁剪画布的点阵信息
+      var imageData = ctx.getImageData(0,0,image.width,image.height).data;
+      console.log(imageData[3])
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0,0,image.width,image.height);
+      var gap = 10;
+
+      // for (var h = 0; h < image.height; h+=gap) {
+      //     for(var w = 0; w < image.width; w+=gap){
+      //       // ctx.fillStyle = "#000";
+      //       // ctx.fillRect(w,h,4,4);
+      //             var position = (image.width * h + w) * 4;
+      //             // 0,1,2,3 => 第一个像素点信息
+      //             // 0 => 0,1,2,3
+      //             // 1 => 4,5,6,7
+      //             var r = imageData[position], g = imageData[position + 1], b = imageData[position + 2];
+
+      //             if(r+g+b <= 255){
+      //                 ctx.fillStyle = "#000";
+      //                 ctx.fillRect(w,h,4,4);
+      //             }
+      //     }
+      // }
+      // 生成气泡
+      var dragonContainer = document.getElementById("container");
+      dragonContainer.style.width = image.width+'px'
+      dragonContainer.style.height = image.height+ 'px'
+      var dragonScale = 1;
+
+      for (var h = 0; h < image.height; h+=gap) {
+          for(var w = 0; w < image.width; w+=gap){
+            var position = (image.width * h + w) * 4;
+            var r = imageData[position], g = imageData[position + 1], b = imageData[position + 2];
+
+            if(r+g+b <= 255){
+              var bubble = document.createElement("div");
+              bubble.setAttribute("class","bubble");
+
+              var bubbleSize = Math.random()*10+5;
+              bubble.style.left = (w*dragonScale-bubbleSize/2) + "px";
+              bubble.style.top = (h*dragonScale-bubbleSize/2) + "px";
+              bubble.style.width = bubble.style.height = bubbleSize+"px";
+              bubble.style.animationDuration = Math.random()*6+4 + "s";
+
+              dragonContainer.appendChild(bubble);
+            }
+          }
+      }
+    }
+  </script>
+</body>
+</html>
