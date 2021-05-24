@@ -39,16 +39,28 @@
     }
     .bubble:hover:before{
       position: absolute;
-      top: -30;
-      left: -43.05px;
+      top: calc(50% - 6px);
+      left: calc(50% - 6px);
       display: inline-block;
-      color: red;
-      width: 100px;
-      height: 12px;
-      content: "秦媛丽真漂亮";
+      color: #5bacd6;
+      width: 5em;
+      height: 1em;
+      overflow: hidden;
+      text-align: center;
+      line-height: 12px;
+      content: "于立伟真帅";
       font-size: 12px;
-      transform-origin: center center;
+      transform-origin: center left;
       transform: scale(0.2);
+      animation: 1.5s dsa infinite;
+    }
+    @keyframes dsa {
+      0%{
+        transform: scale(0.2) rotateX(0deg);
+      }
+      100%{
+        transform: scale(0.2) rotateX(360deg);
+      }
     }
     #f1:active{
       transform-origin: top left;

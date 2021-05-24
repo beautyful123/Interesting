@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>试试</title>
+</head>
+<body>
+  <h1>手动forEach</h1>
+  <div>
+    <h2>arr.forEach(item => {item+=10})不生效必须arr[i]+=10</h2>
+    <h3 style="color:red">理由：that[i]为基本数据类型，不是引用类型因此不会改变值</h3>
+    <h3>如果[[i],[2],[3]],则可以改变，因为arr[i]为引用类型</h3>
+  </div>
+  <script>
+    Array.prototype.feach = function(fn) {
+      const that = this
+      for(var i=0;i<that.length;i++) {
+        fn(that[i],i,that);
+        // that[i] += 10;
+        console.log(that[i])
+      }
+      return undefined;
+    }
+    var a = [[1],[2],[4],[5],[7]]
+    // a.feach(function(item,i,arr){item= item + 10;console.log(item)})
+    var sss = a.feach(function(item,i,arr){item[0] += 10})
+    console.log('sss')  //返回undefined
+    console.log(sss)
+
+    // a.feach()
+    console.log(a)
+  </script>
+</body>
+</html>

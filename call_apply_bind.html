@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>call,apply,bind实现</h1>
+  <script>
+    var name = 'global'
+    var obj = {
+      name: "obj"
+    }
+    function fn(a,b,c) { //测试函数
+      console.log(this.name) //默认打印global
+      console.log(a,b,c)
+    }
+    function customCall() { 
+      // 改变其this指向并调用一次
+      let obj = arguments[0];
+      let param = [...arguments].slice(1);
+      obj.fn = this;
+      obj.fn(...param);
+    }
+    // Function.prototype.customCall = customCall;
+    // fn.customCall(obj,1,2,3)
+    // apply
+    function customApply() {
+      // 改变其this指向并调用一次，且打散入参
+      let obj = arguments[0];
+      let param = arguments[1] || [];
+      obj.fn = this;
+      obj.fn(...param)
+    }
+    Function.prototype.customApply = customApply;
+    // fn.customApply(obj,[1,2,3])
+    // bind
+    function customBind() {
+      // 永久改变其this指向但是不调用
+      let obj = arguments[0];
+      let that = this;
+      return function() {
+        return that.customApply(obj)
+      }
+    }
+    Function.prototype.customBind = customBind;
+    let fn1 = fn.customBind(obj)  // ===> 得到一个改变this指向的新函数
+    fn1();
+  </script>
+</body>
+</html>

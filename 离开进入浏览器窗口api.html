@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>注意看title</h1>
+  <h2>document.hidden || document.webkithidden</h2>
+  <h3>document.addEventListener(`'visibilitychange' || 'webkitvisibilitychange'`,fn,false)</h3>
+  <script>
+    // document.webkitHidden
+    let vEvent = 'visibilitychange' //窗口变化事件
+    if (document.webkitHidden != undefined) { // true - false
+      vEvent = 'webkitvisibilitychange'
+    }
+
+    function fn() {
+      if(document.hidden || document.webkitHidden) { // 浏览器隐藏
+        document.title = '嘛呀~别走~~'
+      } else {
+        document.title = '又来啦~~大爷~~'
+      }
+    }
+    document.addEventListener(vEvent,fn,false);
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise</title>
+</head>
+<body>
+  <!-- promise -->
+  <h1>Promise原理</h1>
+  <p>定义状态：pending,resolve,reject</p>
+  <p>参数：成功函数，失败函数</p>
+  <p>.then()参数： 根据promise状态，resolve,走函数一，reject,走函数二</p>
+  <script>
+    function YLW(executor) { //YLW即promise    executor执行人
+      let _this = this;
+      _this.state = "pending"
+      _this.value = ""
+      function resolve(value) {
+        if(_this.state === 'pending') {
+          _this.state = 'resolve'
+          _this.value = value
+        }
+      }
+      function reject(value) {
+        _this.state = "reject"
+        _this.value = value
+      }
+      executor(resolve,reject);
+      return;
+    }
+    YLW.prototype.then = function (success,error) { //函数
+      let _this = this;
+      if(_this.state === 'resolve') {
+        success(_this.value)
+      } else if(_this.state === "reject") {
+        if (error) {
+          error(_this.value)
+        }
+      }
+      return _this;  //返回this以便下次.then
+    }
+    YLW.prototype.catch = function (err) { //函数
+      if(this.state === 'reject') {
+        err(this.value)
+      }
+    }
+    new YLW((res,rej) => {
+      // res("于立伟真帅")
+      rej("于立伟真丑")
+    }).then((res) => {
+      console.log("成功")
+      console.log(res);
+    }).catch( err => {
+      console.log(err)
+    })
+    
+  </script>
+</body>
+</html>

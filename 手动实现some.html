@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手动实现some</title>
+</head>
+<body>
+  <h1>手动实现some</h1>
+  <script>
+    // some特点：返回boolean,其一符合条件 ? true : false
+    Array.prototype.somee = function(fn) {
+      const that = this; //this为引用类型，因此修改that === 修改this
+      for(var i=0;i<that.length;i++) {
+        let flag = fn(that[i],i,that);
+        console.log('sssssss')
+        if(flag) {
+          return flag
+          break;
+        }
+      }
+      return false
+    }
+    var a = [1,2,3,4,6,8]
+    var b = a.somee(function(item,key,arr) {
+      return item > 8
+    })
+    console.log(a);
+    console.log(b);
+  </script>
+</body>
+</html>

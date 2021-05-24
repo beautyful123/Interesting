@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手动实现map</title>
+</head>
+<body>
+  <h1>实现map</h1>
+  <div>
+
+  </div>
+  <script>
+    // map不修改原数组，返回一个新的数组
+    Array.prototype.mapp = function(fn) {
+      const that = this; //this为引用类型，因此修改that === 修改this
+      const arr = JSON.parse(JSON.stringify(that));
+      for(var i=0;i<arr.length;i++) {
+        fn(arr[i],i,arr);
+      }
+      return arr;
+    }
+    var a = [1,2,3,4]
+    var b = a.mapp(function(item,key,arr) {
+      arr[key]+=10;
+    })
+    console.log(a);
+    console.log(b);
+  </script>
+</body>
+</html>

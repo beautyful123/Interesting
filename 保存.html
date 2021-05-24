@@ -1,0 +1,256 @@
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Toast } from 'antd-mobile';
+import styles from './styles/s_buyPage.less';
+import Pub_head from '../components/pub_head.js';
+import * as fetch from '../services/home';
+import line_top from '../assets/icon/line_top.png';
+import line_left from '../assets/icon/line_left.png';
+import back_x from '../assets/icon/back_x.png';
+
+
+
+@connect(state => ({
+    home: state.home
+}))
+
+
+export default class S_buyPage extends Component {
+    state = {
+        num:1,         // 旅游人数
+        shop_id:'',    // 商品id
+        or_remark:'',   // 备注
+        pay_type:3,   // 支付方式  1为平台币 2微信 3支付宝  5奖励币
+        zzc_kg:false,  // 遮罩层开关
+        tck_kg:false,  // 弹框开关
+        password:'',  // 支付密码
+        buy_kg:false,  // 防重复点击
+        pay_kg:false,   // 防重复
+        or_id:''    ,   //订单id
+        detail_id:'',   //订单详情id
+        third_kg: false   //第三方支付开关
+    }
+    //初始化
+    componentDidMount() {
+        const info = this.filter(this.props.history.location.search)
+        if(info){
+            this.setState({
+                shop_id:info.id
+            })
+        }
+    }
+
+    // 初始化一些值   
+    componentWillReceiveProps(newProps) {
+        const { home } = newProps;
+        const { dispatch } = this.props;
+        if(home.buy_msg){
+            this.setState({
+                num:home.buy_msg.or_pd_num,
+                detail_id:home.buy_msg.detail_id
+            })
+        }
+       
+    }
+
+    //过滤器 用来解码url地址栏传递过来参数
+    filter = (str) => {
+        if (!str) {
+            return ''
+        }
+        const obj = {};
+        decodeURI(str).substr(1).split('&').map(item => {
+            let arr = item.split('=');
+            obj[arr[0]] = arr[1]
+        })
+        return obj
+    }
+
+    buy=async(id)=>{
+        const { num , or_remark , pay_type , shop_id , buy_kg , detail_id } = this.state;
+        if(buy_kg){
+            Toast.info('请勿重复下单',.5)
+            return
+        }
+        this.setState({buy_kg:true})
+        if(!id){
+            Toast.info('请稍后再试',1)
+            this.setState({buy_kg:false})
+            return
+        }
+        const params = {
+            or_remark,
+            or_id:shop_id,
+            pd_num:num,
+            detail_id:id
+        }
+        Toast.loading('加载中...');
+        const result = await fetch.get_addbuyInfo(params);
+        if(result.code == 1){
+            this.setState({buy_kg:false})
+            Toast.hide(); 
+            if(pay_type==1 || pay_type==5){
+                this.setState({
+                    zzc_kg:true,  // 遮罩层开关
+                    tck_kg:true,  // 弹框开关
+                    or_id:result.data,   // 订单id
+                })
+                this.refs.srmm.focus()
+            }else if(pay_type==2 || pay_type==3) {
+                this.setState({
+                    or_id:result.data
+                },() => {
+                    Toast.success('生成订单成功',.5,()=>{
+                        this.thirdPay();
+                    })
+                })
+            }else{
+                Toast.success('生成订单成功',.5,()=>{
+                    // 生成订单成功跳转支付页面
+                    // this.props.history.push('/pay?id='+result.data+'&pay_type='+pay_type)
+                })
+            }
+        }else{
+            this.setState({buy_kg:false})
+            Toast.hide(); 
+            Toast.info(result.msg,1)
+        }
+        
+    }
+    // 第三方支付
+    thirdPay=async() => {
+        document.write(123)
+        const { or_id , third_kg , pay_type } = this.state;
+        if(third_kg){
+            Toast.info('正在付款,请稍等',1)
+            return;
+        }
+        this.setState({third_kg: true})
+        const params = {
+            or_id: 523,
+            pay_type
+        }
+        console.log("秦媛丽")
+        Toast.loading('加载中...');
+        try{
+            const result = await fetch.get_payInfo(params);
+            this.setState({third_kg: false})
+            console.log("于立伟")
+            console.log(result)
+            // document.write(result)
+            // window.location.href="./pay.html?data=result"
+            // if(result.code == 1){
+            //     Toast.hide(); 
+            //     this.setState({third_kg:false})
+            //     Toast.success('支付成功',1,()=>{
+            //         // this.props.history.push('/home/order')
+            //     })
+            // }else{
+            //     Toast.hide(); 
+            //     this.setState({pay_kg:false})
+            //     Toast.info(result.msg,1)
+            // }
+        } catch(err) {
+            this.setState({third_kg: false})
+            console.log(err)
+        }
+
+    }
+
+    //平台币  奖励比支付
+    pay=async()=>{
+        const { or_id , password , pay_kg , pay_type } = this.state;
+        if(pay_kg){
+            Toast.info('正在付款,请稍等',1)
+            return;
+        }
+        this.setState({pay_kg:true})
+        if(!password){
+            Toast.info('请输入支付密码',1);
+            return;
+        }
+        const params = {
+            pay_type,
+            or_id,
+            us_safe_pwd:password
+        }
+        Toast.loading('加载中...');
+        const result = await fetch.get_payInfo(params);
+        if(result.code == 1){
+            Toast.hide(); 
+            this.setState({pay_kg:false})
+            Toast.success('支付成功',1,()=>{
+                this.props.history.push('/home/order')
+            })
+        }else{
+            Toast.hide(); 
+            this.setState({pay_kg:false})
+            Toast.info(result.msg,1)
+        }
+    }
+
+
+    render() {
+        const { history } = this.props;
+        const { num , or_remark , pay_type , zzc_kg , tck_kg , password } = this.state;
+        const { buy_msg } = this.props.home;
+        const header_msg = {
+            title: '立即下单',
+            history,
+            test: ''
+        }
+        return (
+            <div id="buy">
+                <Pub_head {...header_msg} ></Pub_head>
+                <main className={styles.body}>
+                    <div className={styles.luxian}>
+                        <i> <img src={line_top} /> </i>
+                        <i> <img src={line_top} /> </i>                        
+                        <em> <img src={line_left} /> </em>
+                        <em> <img src={line_left} /> </em>
+                        <h5>旅游线路</h5>
+                        <p>{buy_msg.pd_attraction?buy_msg.pd_attraction.replace(' ',' — '):'暂无行程'}</p>
+                    </div>
+                    <div className={styles.num} >
+                        <span>旅游人数</span>
+                        <div>
+                            <span onClick={()=>this.setState({num:num>1?num-1:1})} >-</span>
+                            <input value={num} onChange={e=>this.setState({num:e.target.value>1?e.target.value<9999?e.target.value:9999:1})} type='number' />
+                            <span onClick={()=>this.setState({num:num+1})} >+</span>
+                        </div>
+                    </div>
+                    <div className={styles.type} >
+                        <i>支付方式</i>
+                        <span onClick={()=>this.setState({pay_type:1})} className={pay_type==1?styles.active:''}>平台币</span>
+                        <span onClick={()=>this.setState({pay_type:2})} className={pay_type==2?styles.active:''}>微信</span>
+                        <span onClick={()=>this.setState({pay_type:3})} className={pay_type==3?styles.active:''}>支付宝</span>
+                        <span onClick={()=>this.setState({pay_type:5})} className={pay_type==5?styles.active:''}>奖励币</span>
+                    </div>
+                    <div className={styles.remarks} >
+                        <p>备注</p>
+                        <textarea placeholder="备注：(最多备注120字)" value={or_remark} onChange={e=>this.setState({or_remark:e.target.value})} maxLength="120"></textarea>
+                    </div>
+                </main>
+                <footer className={styles.bottom}>
+                    <div>
+                        <span>旅游价格:</span>
+                        <i>￥{buy_msg?Number(buy_msg.or_pd_price)*num:0}</i>
+                    </div>
+                    <button onClick={() => console.log(this.state)}>state</button>
+                    <button onClick={this.buy.bind(this,buy_msg.detail_id)} >立即下单</button>
+                </footer>
+                <div className={styles.xml_popup}>
+                    <div className={styles.xml_popup_zzc} style={{ display: zzc_kg ? 'block' : 'none' }}></div>
+                    <div className={styles.xml_popup_box} style={{ transform: tck_kg ? 'translate(-50%,-50%)' : 'translate(-50%,250%)' }}>
+                        <img src={back_x} onClick={()=>this.setState({zzc_kg:false,tck_kg:false,password:''})} />
+                        <p>请输入交易密码</p>
+                        <div>
+                            <input type="password" ref='srmm' value={password} onChange={(e)=>this.setState({password:e.target.value})} maxLength="6" />
+                        </div>
+                        <span onClick={this.pay.bind(this)} >确定</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手动实现filter</title>
+</head>
+<body>
+  <h1>手动实现filter</h1>
+  <script>
+    // filter返回过滤条件
+    Array.prototype.filterr = function(fn) {
+      const that = this; //this为引用类型，因此修改that === 修改this
+
+      // 船舰新元素 
+      let arr = []
+      for(var i=0;i<that.length;i++) {
+        let flag = fn(that[i],i,that);
+        if (flag) {
+          arr.push(that[i]);
+        }
+      }
+      return arr;
+    }
+    var a = [1,2,3,4,6,7,8,-1]
+    var b = a.filterr(function (item,i,arr) {
+      return item>2;
+    })
+    console.log(a)
+    console.log(b)
+  </script>
+</body>
+</html>

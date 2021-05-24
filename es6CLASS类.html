@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>class</title>
+</head>
+<body>
+  <p>class为构造函数的另一种写法，其主要操作在constructor()函数内</p>
+  <p>四件事：new Object创建对象，<span style="color:red">自动设置继承关系</span>，this指向对象并赋值，返回新的对象</p>
+  <p>class必须配合new使用，否则报错。而构造函数不使用new也不会报错，返回undefined</p>
+  <p>class内this指向new后的实例，而使用static后，使用this则是指向class类本身而非实例</p>
+  <p>constructor函数内的this.name = name可以写在类的最上层去掉this,等同于写在constructor</p>
+  <p>静态属性与静态方法一样只能在class使用，不能供实例使用</p>
+    class fn{
+      constructor(a='于立伟',b=12) {
+        this.name = a;
+        this.age = b
+      }
+    }
+    function fn1(a='于立伟',b=12) {
+      this.name = a;
+      this.age = b;
+    }
+    var s = new fn1()
+    class fn2{
+      name='秦媛丽'
+      age=80
+      say() {
+        console.log(`我叫${this.name},我${this.age}岁了`)
+      }
+    }
+    let ss = new fn2()
+  </script>
+</body>
+</html>

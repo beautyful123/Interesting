@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .c1>li{
+      height: 100px;
+      border: 1px solid fuchsia;
+    }
+  </style>
+</head>
+<body>
+  <div></div>
+  <a href="#d2">去找哈希</a>
+  <ul class="c1" id="d1">
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <li>原来我只是</li>
+    <link>原来我只是</link>
+  </ul>
+  <a href="#d1">去d1</a>
+  <h1 id="d2">我是d2</h1>
+</body>
+<script>
+  function fn() {
+    console.log("hashchange")
+    const hash = window.location.hash.split('#')[1];
+    let el = document.getElementById(hash);
+    console.log(hash)
+    console.log(el)
+    d1.style.display = 'none'
+    d2.style.display = 'none'
+    el.style.display = 'block'
+  }
+  window.addEventListener("hashchange",fn)
+</script>
+</html>

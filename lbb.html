@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let arr = [
+      {a: 0, b: '于', c: 0}, //c===0 是a有值
+      {a: 1, b: '大', c: 0}, //c===0 是a有值
+      {a: null, b: '立', c: 1},
+      {a: null, b: '立', c: 1},
+      {a: null, b: '伟', c: 1},
+      {a: null, b: '伟', c: 1},
+      {a: null, b: '伟', c: 1},
+      {a: null, b: '很', c: 1},
+      {a: null, b: '帅', c: 1},
+      {a: null, b: '帅', c: 1},
+      {a: null, b: '帅', c: 1}
+    ]
+    // 获取 除已经有的随机数
+    function getRandom() {
+      let val = Math.floor(Math.random()*20);
+      return array.indexOf(val) === -1 ? val : getRandom()
+    }
+    let obj = {}
+    let array = []
+    function fn(arr) {
+      // 
+      arr.forEach(item => {
+        if (item['c'] === 0) {//如果状态为c
+          array.push(item['a']);
+        } 
+      })
+      // 
+      for(var i=0;i<arr.length;i++) {
+        if (arr[i].c !== 0) { //未发运
+          // main
+          if(!obj.hasOwnProperty(arr[i]['b'])) {
+            // 获取随机数
+            let value = getRandom();
+            obj[arr[i]['b']] = value; {于:2}
+            array.push(value)
+            arr[i]['a'] = value;
+          } else {
+            arr[i]['a'] = obj[arr[i]['b']]
+          }
+        }
+      }
+    }
+    
+    fn(arr)
+    console.log(arr)
+  </script>
+</body>
+</html>

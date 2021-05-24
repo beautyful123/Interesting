@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>点击增加</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    .parent{
+      position: relative;
+      height: 500px;
+    }
+    .progress,.cover{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 10px;
+      border: 1px solid #ddd;
+    }
+    .progress{
+      height: 500px;
+    }
+    .cover{
+      background: blue;
+      transition: height 1s;
+    }
+    input{
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="parent">
+      <div class="progress">
+      </div>
+      <div class="cover" :style="{height: coverHeight + 'px'}">
+
+      </div>
+    </div>
+    <input type="text" @keydown="handleAdd">
+  </div>  
+  <script>
+    const el = new Vue({
+      data() {
+        return {
+          coverHeight: 10,
+          time: ''
+        }
+      },
+      methods: {
+        handle() {
+          if (this.coverHeight > 500) {
+            this.coverHeight = 500; 
+          } else if(this.coverHeight === 500) {
+            alert('峰值');
+            return;
+          } else {
+            this.coverHeight += 10; 
+          }
+        },
+        handleAdd() {
+          clearTimeout(this.time);
+          this.handle();
+          this.time = setTimeout(() => {
+            this.coverHeight = 0;
+          }, 500)
+        }
+      }
+    }).$mount("#app")
+  </script>
+</body>
+</html>

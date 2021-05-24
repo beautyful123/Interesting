@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="width:100%;height: 60vh;background:rgba(0,0,0,.5);display: flex;flex-direction:column;justify-content: center;align-items: center;" id="d1">
+    <span style="font-size: 50px;color:#ccc;font-family:kaiti">于立伟真帅</span>
+    <span id="d2" style="font-size: 40px;color: abc;"></span>
+  </div>
+  <script>
+    var count = 0
+    d2.innerText = count
+    function fn() {
+      count++;
+      d2.innerText = count
+    }
+    // 函数防抖
+    function debounce(fn, wait = 1000) {
+      let timer;
+      return function() {
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            fn()
+          }, wait)
+      }
+    }
+    // 防抖立即执行
+    function debounce2(fn, wait = 1000) {
+      let timer;
+      return function() {
+        if(!timer) {
+          fn()
+        }
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          timer = null
+        }, wait)
+      }
+    }
+    // 防抖二合一（略）
+    // 函数节流
+    function throttle (fn, wait = 1000) {
+      let timer;
+      return function () {
+        if(!timer) {
+          // clearTimeout(timer);
+          timer = setTimeout(() => {
+            fn()
+            timer = null
+            // clearTimeout(timer);
+          }, wait)
+        }
+      }
+    }
+    d1.onmousemove = debounce2(fn)
+    // d1.onmousemove = throttle(fn, 400)
+  </script>
+</body>
+</html>

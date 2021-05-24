@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>于立伟真帅啊</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .container{
+      position: relative;
+      margin: 100px auto 0;
+      width: 613px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 24px;
+      line-height: 40px;
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.4);
+    }
+    .btn{
+      float: right;
+      margin-top: 5px;
+      width: 50px;
+      height: 30px;
+      font-size: 24px;
+      line-height: 30px;
+      background: royalblue;
+      border-radius: 5px;
+      clear: both;
+    }
+    .container::before{
+      content: '';
+      float: right;
+      width: 0px;
+      height: calc(100% - 40px);/*先随便设置一个高度*/
+      background: red
+    }
+    #exp{
+      display: none;
+    }
+    #exp:checked+.container{ /*修改该值就是展开操作*/
+      -webkit-line-clamp: 999; /*设置一个足够大的行数就可以了*/
+    }
+    .btn::after{
+      content:'展开'; /*采用content生成*/
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      height: 30px;
+      font-size: 18px;
+      line-height: 30px;
+    }
+    #exp:checked+.container>.btn::after{
+      content: "收起";
+      display: inline-block;
+      width: 100%;
+      height: 30px;
+      text-align: center;
+      font-size: 18px;
+      line-height: 30px;
+    }
+    .container::after{
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: white;
+    }
+    #exp:checked+div.container::after{
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h3>三行之外显示...,多行文本截断、>，展开后显示’收起‘</h3>
+  <h3>三行之内，不显示展开按钮</h3>
+  <h3>按钮在文章右下环绕效果</h3>
+  <h4>注意：</h4>
+  <p style="text-indent: 2em;">
+    :checked伪类配合锚点id+&lt;label&gt;for属性触发checkbox的checked伪类<br>
+    ::after <==> ::before <br>
+    多行文本截断：
+    display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+  </p>
+  <div style="display: flex;">
+    <input type="checkbox" id="exp">
+    <div class="container">
+      <label for="exp" class="btn"></label>
+      <span>一点阴影可以给平板的设计增加纵深的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是的感觉, 很多时候我们都是直接用PhotoShop直接制.</span>
+    </div>
+  </div>
+  </body>
+</html>
