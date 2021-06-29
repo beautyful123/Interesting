@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    body{
+      overflow: hidden;
+    }
+    #canvas{
+      box-shadow: "10px 10px 5px #888888"
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#fff"
+    ctx.font = "60px serif"
+    // ctx.textAlign = "center"
+    ctx.textBaseline = 'top'
+    ctx.fillText("王八真漂亮",0,0)
+    
+    // 开始坐标
+    // let startx = window.innerWidth / 2 - 260;
+    // let starty = window.innerHeight / 2 - 60;
+    // let endx = window.innerWidth / 2 + 260;
+    // let endy = window.innerHeight / 2 + 60;
+    // console.log(startx,starty,endx,endy)
+    // ctx.strokeRect(startx, starty,520,120)
+    const flx = ctx.getImageData(0,0,300,60)
+    console.log(flx)
+
+    class Param{
+      constructor() {
+        this.arr = []
+      }
+      init() {
+        for(let i = 0; i < flx.data.length / 4; i++) {
+          this.arr.push({
+            x: i%300,
+            y: Math.floor(i/300),
+            mx: Math.random()*window.innerWidth,
+            my: Math.random()*window.innerHeight,
+            speed: Math.random()*40+40,
+            color: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},${flx.data[i*4+3]})`
+          })
+        }
+      }
+      draw() {
+        console.log(this.arr)
+        
+        for(var i = 0; i < this.arr.length/1; i++) {
+          ctx.fillStyle = this.arr[i].color;
+          // ctx.arc(this.arr[i].x,this.arr[i].y,1,0,Math.PI*2,false)
+          ctx.fillRect(this.arr[i].mx,this.arr[i].my,4,4)
+        }
+      }
+      update() {
+        
+        this.arr.forEach(item => {
+          item.mx = item.mx + (item.x*5+100 - item.mx) / item.speed
+          item.my = item.my + (item.y*5+100 - item.my) / item.speed
+        })
+      }
+    }
+    const a = new Param();
+    a.init()
+    function step() {
+      console.log(1)
+      ctx.fillStyle = "rgba(255,255,255,0.1)"
+      ctx.fillRect(0,0,window.innerWidth,window.innerHeight)
+      a.draw()
+      a.update()
+      window.requestAnimationFrame(step)
+    }
+    window.requestAnimationFrame(step)
+  </script>
+</body>
+</html>
