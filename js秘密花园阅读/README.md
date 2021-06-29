@@ -257,7 +257,7 @@ new Number(10) + 0 === 10; // True, 由于隐式的类型转换
 分号还是很有必要写的
 
 ## 定时器
-不推荐使用setInterval,二十使用回调函数+setTimeout代替
+不推荐使用setInterval,而是使用回调函数+setTimeout代替
 ```js
 function foo(){
     // 阻塞执行 1 秒
